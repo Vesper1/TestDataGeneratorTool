@@ -154,42 +154,5 @@
 			helper.checkQueryFieldsCheckbox();
 			helper.setSOQL();
 		}
-	},
-
-	onObjectNamesScroll : function(component, event, helper) {
-		let eventTarget = event.target;
-		let objectNames = component.get('v.objectNames');
-		let li = document.querySelector('#li');
-		let ul = document.querySelector('#ul');
-		ul.style.height = objectNames.length * li.offsetHeight + 'px';
-		let element = Math.floor((eventTarget.scrollTop + eventTarget.offsetHeight) / li.offsetHeight);
-		let elementCount = Math.floor(eventTarget.offsetHeight/li.offsetHeight);
-
-		let scrollTop = eventTarget.scrollTop;
-
-		let newComponents = [];
-		let arr = [];
-
-		for ( let i = element-elementCount; i < element; i++) {
-			newComponents.push(
-				'<li role="presentation" aria-selected="true" id="li" style="position: absolute; top:' + scrollTop + 'px">' +
-				'<div class="object-names__item" id="' + objectNames[i].name + '" tabindex="0" role="option"'+
-				' data-value="objectNames"> ' +
-				objectNames[i].name +
-				' </div>' +
-				'</li>'
-			);
-
-			arr.push(objectNames[i].name);
-
-			scrollTop += li.offsetHeight;
-		}
-
-		ul.innerHTML = newComponents;
-
-		for (let j = 0; j < arr.length; j++) {
-			let y = document.getElementById(arr[j]);
-			y.onclick = helper.onObjectNamesBlur;
-		}
 	}
 })

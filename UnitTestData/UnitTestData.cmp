@@ -1,0 +1,277 @@
+<aura:component controller="UnitTestData" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global">
+	<aura:attribute name="objectData" type="Object" access="private"/>
+	<aura:attribute name="replacedObjectData" type="String" access="private"/>
+	<aura:attribute name="objectNames" type="Object" access="private"/>
+	<aura:attribute name="objectNamesFounded" type="Object" access="private"/>
+	<aura:attribute name="fieldData" type="Object" access="private"/>
+	<aura:attribute name="fieldDataFounded" type="Object" access="private"/>
+	<aura:attribute name="isShowSettings" type="Boolean" access="private" default="false"/>
+	<aura:attribute name="showSpinner" type="Boolean" access="private"/>
+	<aura:attribute name="timer" type="Object" access="private"/>
+
+	<aura:handler event="aura:waiting" action="{! c.showSpinner }"/>
+	<aura:handler event="aura:doneWaiting" action="{! c.hideSpinner }"/>
+	<aura:handler name="init" value="{!this}" action="{!c.init}"/>
+
+	<div class="main-block">
+		<div class="header">
+			<h1> @ UNIT TEST DATA </h1>
+		</div>
+		<div class="content-block">
+			<aura:if isTrue="{! v.showSpinner }">
+				<lightning:spinner aura:id="spinner" />
+			</aura:if>
+			<div class="left-side">
+				<div class="slds-form-element">
+					<div class="slds-form-element__control">
+						<div class="slds-grid slds-wrap slds-gutters">
+							<div class="slds-col slds-size_1-of-1">
+								<div class="query-label">SELECT</div>
+								<div class="input-block">
+									<input id="select"
+										placeholder="SOQL fields."
+										class="slds-input slds-input--custom"
+										type="text"
+										disabled="true"
+										onkeyup="{! c.onSelectInputKeyUp }"
+									/>
+									<lightning:buttonIcon iconName="utility:threedots"
+										aura:id="objectFields"
+										class="clip-board__copy-button"
+										variant="border-filled"
+										onclick="{! c.toggleThreeDotsWindow }"
+										alternativeText="Open fields window."
+										disabled="true"
+									/>
+								</div>
+								<div class="object-fields">
+									<div class="object-block__item fadeIn" id="objectFields">
+										<div onchange="{! c.handleFieldsSearchKeyUp }">
+											<lightning:input
+												class="object-block__item__input-search"
+												aura:id="enter-search"
+												name="enter-search"
+												label="Search"
+												type="search"
+											/>
+										</div>
+										<aura:if isTrue="{! not(empty(v.fieldDataFounded)) }">
+											<table class="object-block__item__table">
+												<th>Label</th>
+												<th>Name</th>
+												<th>Type</th>
+												<th>Add</th>
+													<aura:iteration items="{! v.fieldDataFounded }" var="objectField">
+															<tr class="fadeIn">
+																<td>
+																	<div class="object-block__item__table--truncate"
+																		title="{! objectField.label }"
+																	>
+																		{! objectField.label }
+																	</div>
+																</td>
+																<td>
+																	<div class="object-block__item__table--truncate"
+																		title="{! objectField.name }"
+																	>
+																		{! objectField.name }
+																	</div>
+																</td>
+																<td>
+																	<div class="object-block__item__table--truncate"
+																		title="{! objectField.type }"
+																	>
+																		{! objectField.type }
+																	</div>
+																</td>
+																<td>
+																	<div class="slds-checkbox">
+																		<input type="checkbox"
+																			id="{! objectField.name }"
+																			onchange="{! c.handleObjectFieldsCheckbox }"
+																		/>
+																		<label class="slds-checkbox__label"
+																			for="{! objectField.name }"
+																		>
+																			<span class="slds-checkbox_faux">
+																			</span>
+																		</label>
+																	</div>
+																</td>
+															</tr>
+													</aura:iteration>
+											</table>
+											<aura:set attribute="else">
+												Oops, nothing found here ...
+											</aura:set>
+										</aura:if>
+									</div>
+								</div>
+							</div>
+							<div class="slds-col slds-size_1-of-2 slds-is-relative">
+								<div class="query-label">FROM</div>
+								<div class="input-block">
+									<input id="from"
+										placeholder="Object name."
+										class="slds-input slds-input--custom"
+										type="text"
+										disabled="true"
+										onkeyup="{! c.onKeyUpFromInput }"
+									/>
+									<lightning:buttonIcon iconName="utility:threedots"
+										aura:id="objectNames"
+										class="clip-board__copy-button"
+										variant="border-filled"
+										onclick="{! c.toggleThreeDotsWindow }"
+										alternativeText="Open window."
+										disabled="true"
+									/>
+								</div>
+								<!-- <div class="object-names fadeIn" id="objectNames" onscroll="{! c.onObjectNamesScroll }"> -->
+								<div class="object-names fadeIn" id="objectNames">
+									<ul role="listbox" aria-label="Label name" id="ul" style="position:relative">
+										<aura:if isTrue="{! not(empty(v.objectNamesFounded)) }">
+											<aura:iteration items="{! v.objectNamesFounded }" var="item" aura:id="objectNamesFounded">
+												<li role="presentation" aria-selected="true" id="li">
+													<div class="object-names__item"
+														id="{! item.name }"
+														tabindex="0"
+														role="option"
+														data-value="objectNames"
+														name="objectNames"
+														ondblclick="{! c.onObjectNamesBlur }"
+													>
+														{! item.name }
+													</div>
+												</li>
+											</aura:iteration>
+											<aura:set attribute="else">
+												<p class="slds-text-align_center">Oops, nothing found here ...</p>
+											</aura:set>
+										</aura:if>
+									</ul>
+								</div>
+							</div>
+							<div class="slds-col slds-size_1-of-1">
+								<label class="slds-form-element__label" for="query">
+									Your SOQL query.
+								</label>
+								<div class="input-block">
+									<input id="query"
+										placeholder="SOQL query."
+										class="slds-input slds-input--custom"
+										type="text"
+										disabled="true"
+									/>
+									<lightning:buttonIcon iconName="utility:copy_to_clipboard"
+										aura:id="query"
+										class="clip-board__copy-button"
+										variant="border-filled"
+										onclick="{! c.copyToClipboard }"
+										alternativeText="Copy to clipboard"
+									/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="slds-form-element">
+					<label class="slds-form-element__label" for="testDataTextarea">
+						Unit test data text.
+					</label>
+					<div class="slds-form-element__control clip-board">
+						<textarea class="slds-textarea" id="testDataTextarea" readonly="true" disabled="true"/>
+						<lightning:buttonIcon iconName="utility:copy_to_clipboard"
+							aura:id="testDataTextarea"
+							class="clip-board__copy-button"
+							variant="border-filled"
+							onclick="{! c.copyToClipboard }"
+							alternativeText="Copy to clipboard"
+						/>
+					</div>
+				</div>
+			</div>
+			<div class="right-side">
+				<div class="slds-col slds-size_1-of-2">
+					<label class="slds-form-element__label" for="query">
+						Enter test data factory class name.
+					</label>
+					<input id="dataFactoryName"
+						placeholder="Data factory class name."
+						class="slds-input slds-input--custom"
+						type="text"
+						onkeyup="{! c.onInputDataFactoryBlur }"
+					/>
+					<lightning:button variant="brand"
+						label="Generate test data."
+						title="Generate unit test data."
+						onclick="{! c.getData }"
+						aura:id="generateTestDataButton"
+						disabled="true"
+					/>
+				</div>
+				<aura:if isTrue="{! v.isShowSettings }">
+					<div>
+						<aura:if isTrue="{! not(empty(v.objectData.generatedObjectsName)) }">
+							<div>
+								<label class="slds-form-element__label">Settings</label>
+							</div>
+							<div class="object-block">
+								<div class="object-block__category" data-value="convertToList" onclick="{! c.toggleArrowBox }">
+									Convert items to list
+									<lightning:buttonIcon iconName="utility:chevronright"
+										aura:id="listArrow"
+										variant="bare"
+										alternativeText="Show"
+									/>
+								</div>
+								<div class="object-block__item fadeIn" id="convertToList">
+									<table class="object-block__item__table">
+										<th>Name</th>
+										<th>List</th>
+										<aura:iteration items="{! v.objectData.generatedObjectsName }" var="objectItem">
+											<tr>
+												<td class="slds-truncate">
+													{! objectItem }
+												</td>
+												<td>
+													<div class="slds-checkbox">
+														<input type="checkbox"
+															id="{! objectItem }"
+															onchange="{! c.convertItemsToList }"
+														/>
+														<label class="slds-checkbox__label" for="{! objectItem }">
+															<span class="slds-checkbox_faux"></span>
+														</label>
+													</div>
+												</td>
+											</tr>
+										</aura:iteration>
+										<aura:if isTrue="{! v.objectData.generatedObjectsName.length > 1 }">
+											<tr>
+												<td>
+													All
+												</td>
+												<td>
+													<div class="slds-checkbox">
+														<input type="checkbox"
+															id="doAllList"
+															onchange="{! c.convertItemsToList }"
+														/>
+														<label class="slds-checkbox__label" for="doAllList">
+															<span class="slds-checkbox_faux"></span>
+														</label>
+													</div>
+												</td>
+											</tr>
+										</aura:if>
+									</table>
+								</div>
+							</div>
+						</aura:if>
+					</div>
+				</aura:if>
+			</div>
+		</div>
+	</div>
+</aura:component>

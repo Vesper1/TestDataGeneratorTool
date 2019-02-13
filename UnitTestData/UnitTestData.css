@@ -1,0 +1,191 @@
+.THIS .slds-textarea {
+	padding: 10px;
+	font-size: 12px;
+	font-family: tahoma;
+	min-width: 500px;
+	width: 100%;
+	min-height: 200px;
+	color: rgb(62, 62, 62);
+}
+
+.THIS.main-block {
+	background-color: white;
+}
+
+.THIS .header {
+	padding: 10px;
+	color: white;
+	background: rgba(52,179,247,1);
+	background: -moz-linear-gradient(left, rgba(52,179,247,1) 0%, rgba(13,194,214,1) 30%, rgba(24,233,240,1) 69%, rgba(39,201,230,1) 100%);
+	background: -webkit-gradient(left top, right top, color-stop(0%, rgba(52,179,247,1)), color-stop(30%, rgba(13,194,214,1)), color-stop(69%, rgba(24,233,240,1)), color-stop(100%, rgba(39,201,230,1)));
+	background: -webkit-linear-gradient(left, rgba(52,179,247,1) 0%, rgba(13,194,214,1) 30%, rgba(24,233,240,1) 69%, rgba(39,201,230,1) 100%);
+	background: -o-linear-gradient(left, rgba(52,179,247,1) 0%, rgba(13,194,214,1) 30%, rgba(24,233,240,1) 69%, rgba(39,201,230,1) 100%);
+	background: -ms-linear-gradient(left, rgba(52,179,247,1) 0%, rgba(13,194,214,1) 30%, rgba(24,233,240,1) 69%, rgba(39,201,230,1) 100%);
+	background: linear-gradient(to right, rgba(52,179,247,1) 0%, rgba(13,194,214,1) 30%, rgba(24,233,240,1) 69%, rgba(39,201,230,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#34b3f7', endColorstr='#27c9e6', GradientType=1 );
+}
+
+.THIS .content-block {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	padding: 10px;
+	min-height: 600px;
+}
+
+.THIS .left-side {
+	min-width: 500px;
+}
+
+.THIS .right-side {
+	margin-left: 10px;
+	width: 30%;
+}
+
+.THIS .right-side div {
+	margin-bottom: 5px;
+}
+
+.THIS .clip-board {
+	position: relative;
+}
+
+.THIS .clip-board__copy-button {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	background-color: rgb(240, 240, 240);
+	color: black;
+	border-radius: 7px;
+	font-weight: bold;
+	font-size: .9em;
+}
+.THIS .object-block__item {
+	display: inline-block;
+	min-width: 300px;
+	max-height: 200px;
+	overflow: auto;
+	border-bottom: 1px solid #39799e;
+}
+.THIS .object-block__item div{
+	display: block;
+}
+
+@-webkit-keyframes fadeIn {
+	0% {opacity: 0;}
+	100% {opacity: 1;}
+}
+
+@keyframes fadeIn {
+	0% {opacity: 0;}
+	100% {opacity: 1;}
+}
+
+.THIS .fadeIn {
+	-webkit-animation-name: fadeIn;
+	animation-name: fadeIn;
+	-webkit-animation-duration: .7s;
+	animation-duration: .7s;
+	-webkit-animation-fill-mode: forwards;
+	animation-fill-mode: forwards;
+}
+
+.THIS .object-block__item {
+	display: none;
+}
+
+.THIS .object-block__item__table {
+	background-color: #f1f8ff;
+}
+
+.THIS .data-factory-input {
+	max-width: 300px !important;
+}
+
+.THIS .object-block__item__table td {
+	padding: 3px;
+}
+
+.THIS .object-block__item__table--truncate {
+	width: 150px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.THIS .query-label {
+	color: #de4e4e;
+	font-size: 16px;
+}
+
+.THIS .object-block__category {
+	background-color: white;
+	padding: 10px;
+	border: 1px solid rgb(226, 226, 226);
+	width: 180px;
+	border-radius: 8px;
+	font-size: 13px;
+	text-align: center;
+	color: #0070d2;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.THIS .object-block__category:active {
+	border: 1px solid #0774c1;
+}
+
+.THIS .object-block__item__input-search {
+	max-width: 99%;
+	margin: 2px;
+}
+
+.THIS .slds-input--custom {
+	border: 1px solid #d9dbdd !important;
+	padding-left: 10px !important;
+	margin-bottom: 5px;
+}
+
+.THIS .slds-form-element {
+	max-width: 800px;
+}
+
+.THIS .input-block {
+	position: relative;
+}
+
+.THIS .input-block .clip-board__copy-button {
+	top: 0px;
+	right: -1px;
+}
+
+.THIS .object-names, .THIS .object-fields .object-block__item {
+	width: 92%;
+	border-style: solid;
+	border-color: #d9dbdd;
+	border-width: 0px 1px 1px 1px;
+	max-height: 200px;
+	overflow: auto;
+	position: absolute;
+	background: white;
+	z-index: 10;
+	display: none;
+	background-color: #f1f8ff;
+}
+
+.THIS .object-fields .object-block__item {
+	width: 100%;
+	padding: 10px;
+	max-height: 350px;
+	z-index: 11;
+}
+
+.THIS .object-names__item {
+	cursor: pointer;
+	padding: 10px;
+}
+
+.THIS .object-names__item:focus {
+	background-color: white;
+	outline: none;
+}
